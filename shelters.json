@@ -1,0 +1,5 @@
+[
+    {"name" : "避難所A", "coordinates": [], "description": "ここは避難所Aです。収容人数: 300人"},
+    {"name" : "避難所B", "coordinates": [], "description": "ここは避難所Bです。収容人数: 150人"},
+    {"name" : "避難所C", "coordinates": [], "description": "ここは避難所Cです。収容人数: 200人"}
+]
