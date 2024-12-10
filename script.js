@@ -1,5 +1,5 @@
 // Mapboxアクセストークン
-mapboxgl.accessToken = 'pk.eyJ1Ijoic2ExZDAiLCJhIjoiY20zbnk4ZzhkMHllbjJtb2c1eW5hMWp6YyJ9.qyDqF5qDRDBBGKg0vltiMw';
+mapboxgl.accessToken = window.MAPBOX_ACCESS_TOKEN;
 
 // 地図を初期化
 const map = new mapboxgl.Map({
