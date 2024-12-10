@@ -14,6 +14,12 @@
     z-index: 9999; /* Popupが他の要素に隠れないように */
 }
 
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
 h1 {
     text-align: center;
     font-size: 24px;
