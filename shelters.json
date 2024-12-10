@@ -1,5 +1,17 @@
 [
-    {"name" : "避難所A", "coordinates": [], "description": "ここは避難所Aです。収容人数: 300人"},
-    {"name" : "避難所B", "coordinates": [], "description": "ここは避難所Bです。収容人数: 150人"},
-    {"name" : "避難所C", "coordinates": [], "description": "ここは避難所Cです。収容人数: 200人"}
+    {
+        "name" : "避難所A",
+        "coordinates": [136.62484168928964, 36.530218803155876],
+        "description": "ここは避難所Aです。収容人数: 300人"
+    },
+    {
+        "name" : "避難所B",
+        "coordinates": [136.63667477910857, 36.51550838506718],
+        "description": "ここは避難所Bです。収容人数: 150人"
+    },
+    {
+        "name" : "避難所C",
+        "coordinates": [136.62228943823146, 36.552803200039385],
+        "description": "ここは避難所Cです。収容人数: 200人"
+    }
 ]
