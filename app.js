@@ -9,23 +9,21 @@ const map = new mapboxgl.Map({
     zoom: 12 // 初期ズームレベル
 });
 
-// 避難所のデータ
-const shelters = [
-    { name: '避難所A', coordinates: [139.7007, 35.6895], description: 'ここは避難所Aです。収容人数: 300人' },
-    { name: '避難所B', coordinates: [139.7107, 35.6995], description: 'ここは避難所Bです。収容人数: 150人' },
-    { name: '避難所C', coordinates: [139.6907, 35.6795], description: 'ここは避難所Cです。収容人数: 200人' }
-];
-
 // JSONデータを読み込む
-fetch('shelters.json') // JSONファイルのパス
-    .then(response => response.json())
+fetch('./shelters.json') // JSONファイルのパス
+    .then(response => response.json()) // JSONデータの取得
     .then(shelters => {
+        // shelterオブジェクトを確認
+        console.log(shelters); // これでJSONデータが正しく読み込まれているか確認
+
         // マーカーを追加
         shelters.forEach(shelter => {
+            // マーカーを作成
             const marker = new mapboxgl.Marker()
                 .setLngLat(shelter.coordinates)
                 .addTo(map);
 
+            // マーカーをクリックした際のポップアップ
             marker.getElement().addEventListener('click', () => {
                 new mapboxgl.Popup()
                     .setLngLat(shelter.coordinates)
@@ -39,4 +37,6 @@ fetch('shelters.json') // JSONファイルのパス
             });
         });
     })
-    .catch(error => console.error('エラーが発生しました:', error));
+    .catch(error => {
+        console.error('エラーが発生しました:', error); // エラーハンドリング
+    });
