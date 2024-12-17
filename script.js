@@ -1,6 +1,22 @@
 // Mapboxアクセストークン
 mapboxgl.accessToken = window.MAPBOX_ACCESS_TOKEN;
 
+// マップの設定値
+const MAP_CONFIG = {
+    colors: {
+        currentLocation: '#0000FF',      // 現在地のマーカー色
+        closestShelter: '#FF0000',      // 最寄りの避難所のマーカー色
+        otherShelters: '#FF9999',       // その他の避難所のマーカー色
+        routeLine: '#FF0000',           // 経路の線の色
+        directLine: '#FF0000'           // 直線経路の色
+    },
+    style: {
+        routeWidth: 4,                  // 経路の線の太さ
+        directLineWidth: 2,             // 直線経路の線の太さ
+        directLineDash: [2, 2]          // 直線経路の破線パターン
+    }
+};
+
 // 地図を初期化
 const map = new mapboxgl.Map({
     container: 'map',
@@ -32,7 +48,7 @@ fetch('./shelters.json') // JSONファイルのパス
                     map.setCenter(userCoordinates);
 
                     // 現在地にマーカーを追加
-                    new mapboxgl.Marker({ color: 'red' })
+                    new mapboxgl.Marker({ color: MAP_CONFIG.colors.currentLocation })
                         .setLngLat(userCoordinates)
                         .setPopup(new mapboxgl.Popup().setText("あなたの現在地"))
                         .addTo(map);
@@ -57,8 +73,10 @@ fetch('./shelters.json') // JSONファイルのパス
 
                     // すべての避難所にマーカーを追加
                     shelters.forEach(shelter => {
-                        // 最寄りの避難所は濃い赤、それ以外は薄い赤に設定
-                        const color = shelter === closestShelter ? '#FF0000' : '#FF9999';
+                        // 最寄りの避難所かどうかで色を変える
+                        const color = shelter === closestShelter 
+                            ? MAP_CONFIG.colors.closestShelter 
+                            : MAP_CONFIG.colors.otherShelters;
                         
                         // 避難所までの距離を計算
                         const distance = calculateDistance(userCoordinates, shelter.coordinates);
@@ -186,8 +204,8 @@ function getRoute(start, end) {
                     type: 'line',
                     source: 'route',
                     paint: {
-                        'line-color': '#FF0000',
-                        'line-width': 4
+                        'line-color': MAP_CONFIG.colors.routeLine,
+                        'line-width': MAP_CONFIG.style.routeWidth
                     }
                 });
             }
@@ -227,9 +245,9 @@ function showDirectLine(start, end) {
         type: 'line',
         source: 'direct-line',
         paint: {
-            'line-color': '#FF0000',
-            'line-width': 2,
-            'line-dasharray': [2, 2] // 破線で表示
+            'line-color': MAP_CONFIG.colors.directLine,
+            'line-width': MAP_CONFIG.style.directLineWidth,
+            'line-dasharray': MAP_CONFIG.style.directLineDash
         }
     });
 }
