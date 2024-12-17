@@ -7,7 +7,6 @@
 /* Popupのスタイルを調整 */
 .mapboxgl-popup {
     max-width: 300px;
-    background-color: white;
     border-radius: 5px;
     padding: 10px;
     font-family: Arial, sans-serif;
