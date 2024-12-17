@@ -12,6 +12,27 @@
     <h1>地域防災マップ</h1>
     <div id="map"></div> <!-- 地図表示エリア -->
     
+    <div id="notification-panel">
+        <div class="notification-header">
+            <h2>緊急情報</h2>
+            <button id="notification-toggle">▼</button>
+        </div>
+        <div class="notification-content">
+            <div id="earthquake-info" class="notification-section">
+                <h3>地震情報</h3>
+                <div class="notification-messages"></div>
+            </div>
+            <div id="weather-warning" class="notification-section">
+                <h3>気象警報</h3>
+                <div class="notification-messages"></div>
+            </div>
+            <div id="tsunami-info" class="notification-section">
+                <h3>津波情報</h3>
+                <div class="notification-messages"></div>
+            </div>
+        </div>
+    </div>
+    
     <!-- ここでMAPBOX_ACCESS_TOKENを設定 -->
     <script>
         window.MAPBOX_ACCESS_TOKEN = 'pk.eyJ1Ijoic2ExZDAiLCJhIjoiY20zbnk4ZzhkMHllbjJtb2c1eW5hMWp6YyJ9.qyDqF5qDRDBBGKg0vltiMw';
