@@ -57,7 +57,8 @@ fetch('./shelters.json') // JSONファイルのパス
 
                     // すべての避難所にマーカーを追加
                     shelters.forEach(shelter => {
-                        const color = shelter === closestShelter ? 'blue' : 'green';
+                        // 最寄りの避難所は濃い赤、それ以外は薄い赤に設定
+                        const color = shelter === closestShelter ? '#FF0000' : '#FF9999';
                         
                         // 避難所までの距離を計算
                         const distance = calculateDistance(userCoordinates, shelter.coordinates);
