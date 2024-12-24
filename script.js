@@ -180,21 +180,21 @@ function getRoute(start, end) {
                 throw new Error('経路が見つかりませんでした');
             }
 
-            const route = data.routes[0].geometry;
+            const route = data.routes[0];
             
-            // 経路のソースとレイヤーを追加
+            // 経路の表示
             if (!map.getSource('route')) {
                 map.addSource('route', {
                     type: 'geojson',
                     data: {
                         type: 'Feature',
-                        geometry: route
+                        geometry: route.geometry
                     }
                 });
             } else {
                 map.getSource('route').setData({
                     type: 'Feature',
-                    geometry: route
+                    geometry: route.geometry
                 });
             }
 
@@ -209,15 +209,96 @@ function getRoute(start, end) {
                     }
                 });
             }
+
+            // 地図の向きと表示位置を調整
+            adjustMapView(start, end);
         })
         .catch(error => {
             console.error('経路の取得に失敗しました:', error);
-            // エラーメッセージをユーザーに表示
             alert('経路を表示できませんでした。');
-            
-            // 直線の経路を代替として表示
             showDirectLine(start, end);
+            // 直線表示の場合も地図の向きを調整
+            adjustMapView(start, end);
         });
+}
+
+// 地図の向きと表示位置を調整する関数
+function adjustMapView(start, end) {
+    // 現在地から目的地への角度を計算
+    const bearing = getBearing(start, end);
+    
+    // 現在地と目的地の中間点を計算
+    const midPoint = [(start[0] + end[0]) / 2, (start[1] + end[1]) / 2];
+    
+    // 2点間の距離を計算
+    const distance = getDistance(start, end);
+    
+    // 距離に基づいてズームレベルを調整
+    const zoom = calculateZoomLevel(distance);
+
+    // 地図を回転させ、位置を調整
+    map.easeTo({
+        center: start, // 現在地を中心に
+        bearing: bearing, // 目的地の方向に回転
+        zoom: zoom,
+        pitch: 50, // 3D的な見た目にする
+        duration: 1000 // アニメーション時間（ミリ秒）
+    });
+}
+
+// 2点間の角度を計算（度数法）
+function getBearing(start, end) {
+    const startLat = toRadian(start[1]);
+    const startLng = toRadian(start[0]);
+    const endLat = toRadian(end[1]);
+    const endLng = toRadian(end[0]);
+
+    const dLng = endLng - startLng;
+
+    const y = Math.sin(dLng) * Math.cos(endLat);
+    const x = Math.cos(startLat) * Math.sin(endLat) -
+             Math.sin(startLat) * Math.cos(endLat) * Math.cos(dLng);
+
+    let bearing = toDegree(Math.atan2(y, x));
+    bearing = (bearing + 360) % 360; // 0-360度に正規化
+
+    return bearing;
+}
+
+// ラジアンに変換
+function toRadian(degree) {
+    return degree * Math.PI / 180;
+}
+
+// 度数に変換
+function toDegree(radian) {
+    return radian * 180 / Math.PI;
+}
+
+// 2点間の距離を計算（キロメートル）
+function getDistance(start, end) {
+    const R = 6371; // 地球の半径（km）
+    const lat1 = toRadian(start[1]);
+    const lat2 = toRadian(end[1]);
+    const dLat = toRadian(end[1] - start[1]);
+    const dLon = toRadian(end[0] - start[0]);
+
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+             Math.cos(lat1) * Math.cos(lat2) *
+             Math.sin(dLon/2) * Math.sin(dLon/2);
+    
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+}
+
+// 距離に基づいてズームレベルを計算
+function calculateZoomLevel(distance) {
+    // 距離に応じて適切なズームレベルを返す
+    if (distance < 0.5) return 15;
+    if (distance < 1) return 14;
+    if (distance < 2) return 13;
+    if (distance < 5) return 12;
+    return 11;
 }
 
 // 2点間を直線で結ぶ関数を追加
